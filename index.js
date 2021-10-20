@@ -1,18 +1,21 @@
-// clave mongodb:4j7B8BD34gOZj82i
-// user:gutierrezDB
+// clave mongodb:dxBvwveMTChSLbnC
+// user:adminpractica
 
 
-const express= require('express');// importamos el node
+const express = require('express'); // importamos el node
 require('dotenv').config();
-const {dbConection}= require('./config/database');
-const cors=require('cors');
+const { dbConection } = require('./config/database');
+const cors = require('cors');
 
 
 //creamos servidor express
-const app=express();
+const app = express();
 
-//Configuraion de cors
+// configuracion CORS
 app.use(cors());
+
+//lectura y parseo del body
+app.use(express.json());
 
 //Conexion a la BD
 dbConection();
@@ -20,14 +23,19 @@ dbConection();
 
 
 // Rutas de la API
-app.get('/',(req,res)=>{
-    res.json({
-        ok:true,
-        msg:'Bienvenidos a node'
-    });
-});
+app.use('/api/usuarios', require('./routes/usuarios.routes'));
+app.use('/api/login', require('./routes/auth.routes'));
+app.use('/api/clientes', require('./routes/clientes.routes'));
+app.use('/api/productos', require('./routes/productos.routes'));
+app.use('/api/categorias', require('./routes/categoria.routes'));
+app.use('/api/ventas', require('./routes/venta.routes'));
+app.use('/api/detalleVentas', require('./routes/detalleVenta.routes'));
+
+//app.use('/api/rol',require('./routes/rol.routes'));
+//app.use('/api/compra',require('./routes/compra.routes'));
+
 
 //para levantar el servidor 
-app.listen(process.env.PORT, ()=>{
+app.listen(process.env.PORT, () => {
     console.log('Servidor corriendo en el puerto ' + process.env.PORT);
 })
